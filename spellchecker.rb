@@ -53,10 +53,16 @@ end
 
 # Add and pre-process words to check into an array
 begin
-	File.new(ARGV[0], "r").each_line do |line|
+	ARGV.each do |word|
+		if word =~ /\w+\.\w+/
+			File.new(word, "r").each_line do |line|
 
-		line = line.downcase.chomp # Standardize word
-		@words_to_check << line
+				line = line.downcase.chomp # Standardize word
+				@words_to_check << line
+			end
+		else
+			@words_to_check << word
+		end
 	end
 
 rescue Exception => e
@@ -93,7 +99,7 @@ def extra_letter( dict_word, word )
 		test_word = word[0, i+1] + word[i+2, num]
 
 		# Match made
-		return true if dict_word.eql? test_word	
+		return true if @dictionary[test_word]	
 	end
 
 	# No match found
